@@ -58,8 +58,8 @@ RUN \
 FROM debian:sid-slim AS certs
 RUN apt update && apt install -y ca-certificates
 
-# use musl busybox since it's staticly compiled on all platforms
-FROM busybox:1.36 AS busybox
+# use uclibc busybox since it's staticly compiled on all platforms
+FROM busybox:uclibc AS busybox
 
 FROM scratch AS kaniko-base-slim
 
