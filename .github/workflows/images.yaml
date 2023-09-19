@@ -33,28 +33,28 @@ jobs:
         include:
         - image: executor
           target: kaniko-executor
-          platforms: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le
+          platforms: linux/riscv64
           image-name: gcr.io/kaniko-project/executor
           tag: ${{ github.sha }}
           release-tag: latest
 
         - image: executor-debug
           target: kaniko-debug
-          platforms: linux/amd64,linux/arm64,linux/s390x
+          platforms: linux/riscv64
           image-name: gcr.io/kaniko-project/executor
           tag: ${{ github.sha }}-debug
           release-tag: debug
 
         - image: executor-slim
           target: kaniko-slim
-          platforms: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le
+          platforms: linux/riscv64
           image-name: gcr.io/kaniko-project/executor
           tag: ${{ github.sha }}-slim
           release-tag: slim
 
         - image: warmer
           target: kaniko-warmer
-          platforms: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le
+          platforms: linux/riscv64
           image-name: gcr.io/kaniko-project/warmer
           tag: ${{ github.sha }}
           release-tag: latest
@@ -78,12 +78,8 @@ jobs:
     - id: platforms
       run: |
         event="${{ github.event_name }}"
-        if [[ "$event" == "pull_request" ]]; then
-          echo "platforms=linux/amd64" >> $GITHUB_OUTPUT
-        else
-          platforms="${{ matrix.platforms }}"
-          echo "platforms=${platforms}" >> $GITHUB_OUTPUT
-        fi
+        platforms="${{ matrix.platforms }}"
+        echo "platforms=${platforms}" >> $GITHUB_OUTPUT
     # Build and push with Docker.
     - uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
       with:

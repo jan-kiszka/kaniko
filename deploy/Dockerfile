@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.21 AS builder
+FROM ghcr.io/go-riscv/go:1.21.0-sid AS builder
 WORKDIR /src
 
 # This arg is passed by docker buildx & contains the target CPU architecture (e.g., amd64, arm64, etc.)
@@ -55,11 +55,11 @@ RUN \
   make out/executor out/warmer
 
 # Generate latest ca-certificates
-FROM debian:bullseye-slim AS certs
+FROM debian:sid-slim AS certs
 RUN apt update && apt install -y ca-certificates
 
-# use musl busybox since it's staticly compiled on all platforms
-FROM busybox:musl AS busybox
+# use uclibc busybox since it's staticly compiled on all platforms
+FROM busybox:uclibc AS busybox
 
 FROM scratch AS kaniko-base-slim
 
